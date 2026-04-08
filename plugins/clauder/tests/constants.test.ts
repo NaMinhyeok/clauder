@@ -8,6 +8,7 @@ import {
   CLASSES,
   EVOLUTION_STAGES,
   xpForNextLevel,
+  RARITY_WEIGHTS,
 } from '../src/constants.js';
 
 describe('constants', () => {
@@ -56,5 +57,17 @@ describe('constants', () => {
     expect(EVOLUTION_STAGES).toHaveLength(4);
     expect(EVOLUTION_STAGES[0]).toEqual({ minLevel: 1, maxLevel: 9, name: 'Apprentice', emoji: '🥚' });
     expect(EVOLUTION_STAGES[3]).toEqual({ minLevel: 40, maxLevel: Infinity, name: 'Master', emoji: '👑' });
+  });
+});
+
+describe('RARITY_WEIGHTS', () => {
+  it('weights sum to 100', () => {
+    const total = RARITY_WEIGHTS.reduce((sum, r) => sum + r.weight, 0);
+    expect(total).toBe(100);
+  });
+
+  it('has 3 rarities: common, rare, epic', () => {
+    const ids = RARITY_WEIGHTS.map((r) => r.id);
+    expect(ids).toEqual(['common', 'rare', 'epic']);
   });
 });
