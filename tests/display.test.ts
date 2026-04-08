@@ -49,7 +49,7 @@ describe('renderCard', () => {
     };
     const card = renderCard(state, { achievementCount: 23, totalAchievements: 50 });
     expect(card).toContain('Lv.45');
-    expect(card).toContain('12일');
+    expect(card).toContain('12d');
     expect(card).toContain('BUILD');
     expect(card).toContain('23/50');
   });

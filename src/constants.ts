@@ -37,11 +37,11 @@ export const CONDITION_MULTIPLIERS: Record<number, number> = {
 };
 
 export const CONDITION_MESSAGES: Record<number, string> = {
-  1: '배고파... 😢',
-  2: '좀 힘든데...',
+  1: 'Hungry... 😢',
+  2: 'Feeling rough...',
   3: '',
-  4: '컨디션 좋아!',
-  5: '불타오르고 있어! 🔥',
+  4: 'Feeling good!',
+  5: 'On fire! 🔥',
 };
 
 export interface ClassDef {
@@ -51,12 +51,12 @@ export interface ClassDef {
 }
 
 export const CLASSES: Record<StatName, ClassDef> = {
-  build:   { name: 'Architect',  emoji: '🏗️', title: '코드를 쌓아올리는 자' },
-  explore: { name: 'Explorer',   emoji: '🔭', title: '코드베이스를 꿰뚫는 자' },
-  debug:   { name: 'Mechanic',   emoji: '🔧', title: '버그를 사냥하는 자' },
-  deploy:  { name: 'Operator',   emoji: '🚀', title: '배포의 달인' },
-  think:   { name: 'Strategist', emoji: '🧠', title: '아키텍처를 그리는 자' },
-  speed:   { name: 'Sprinter',   emoji: '⚡', title: '생산성의 화신' },
+  build:   { name: 'Architect',  emoji: '🏗️', title: 'The one who builds code' },
+  explore: { name: 'Explorer',   emoji: '🔭', title: 'The one who reads all code' },
+  debug:   { name: 'Mechanic',   emoji: '🔧', title: 'The bug hunter' },
+  deploy:  { name: 'Operator',   emoji: '🚀', title: 'The deploy master' },
+  think:   { name: 'Strategist', emoji: '🧠', title: 'The architecture designer' },
+  speed:   { name: 'Sprinter',   emoji: '⚡', title: 'The productivity machine' },
 };
 
 export interface EvolutionStage {

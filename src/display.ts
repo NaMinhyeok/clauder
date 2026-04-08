@@ -31,7 +31,7 @@ export function renderCard(state: ClauderState, { achievementCount = 0, totalAch
   const emoji = cls ? cls.emoji : stage.emoji;
   const className = cls ? cls.name : stage.name;
 
-  const header = `${emoji} ${className} Lv.${state.level} | 🔥 ${state.consecutiveDays}일 | ⭐ ${renderConditionStars(state.condition)}`;
+  const header = `${emoji} ${className} Lv.${state.level} | 🔥 ${state.consecutiveDays}d | ⭐ ${renderConditionStars(state.condition)}`;
   const separator = '─'.repeat(35);
 
   const statEntries = STAT_NAMES.map((s) => ({
@@ -42,7 +42,7 @@ export function renderCard(state: ClauderState, { achievementCount = 0, totalAch
   statEntries.sort((a, b) => b.absolute - a.absolute);
 
   const statLines = statEntries.map((e) => renderStatLine(e.name, e.ratio, e.absolute)).join('\n');
-  const footer = `🏆 업적 ${achievementCount}/${totalAchievements}`;
+  const footer = `🏆 Achievements ${achievementCount}/${totalAchievements}`;
 
   return `${header}\n${separator}\n${statLines}\n${separator}\n${footer}`;
 }

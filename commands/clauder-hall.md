@@ -6,13 +6,13 @@ description: Show the Hall of Fame — retired Clauders
 Read `${CLAUDE_PLUGIN_DATA}/hall-of-fame.json` and `${CLAUDE_PLUGIN_DATA}/state.json`.
 
 ```
-┌─ 명예의 전당 ─────────────────┐
+┌─ Hall of Fame ────────────────┐
 │ #N {emoji} {class} Lv.{level} │
-│    봉인일: {retiredAt}        │
-│    플레이: {playDays}일       │
+│    Retired: {retiredAt}       │
+│    Played: {playDays}d        │
 ├───────────────────────────────┤
-│ 현재: {emoji} {class} Lv.{lv} │
+│ Current: {emoji} {class} Lv.  │
 └───────────────────────────────┘
 ```
 
-Empty: "명예의 전당이 비어있어요. Lv.40 이상에서 /clauder-retire로 봉인할 수 있습니다."
+Empty: "Hall of Fame is empty. Retire at Lv.40+ with /clauder-retire."

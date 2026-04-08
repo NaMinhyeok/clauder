@@ -83,11 +83,11 @@ async function handlePostToolUse(dataDir: string, input: HookInput): Promise<Hoo
 
   const newClass = determineClass(state.stats);
   if (newClass && (!prevClass || prevClass.name !== newClass.name) && state.level >= 10) {
-    messages.push(`✨ 진화! → ${newClass.emoji} ${newClass.name}`);
+    messages.push(`✨ Evolved! → ${newClass.emoji} ${newClass.name}`);
   }
 
   for (const ach of newAchievements) {
-    messages.push(`🏆 업적 발견: ${ach.name}`);
+    messages.push(`🏆 Achievement unlocked: ${ach.name}`);
   }
 
   if (messages.length === 0) return {};
@@ -115,13 +115,13 @@ async function handleSessionStart(dataDir: string): Promise<HookOutput> {
 
   let greeting: string;
   if (!prevLastSession) {
-    greeting = '또 왔네! 🙌';
+    greeting = 'Welcome back! 🙌';
   } else {
     const days = Math.floor((now.getTime() - new Date(prevLastSession).getTime()) / 86400000);
-    if (days < 1) greeting = '또 왔네! 🙌';
-    else if (days < 3) greeting = '보고 싶었어!';
-    else if (days < 7) greeting = '오랜만이야~ 어디 갔다 왔어?';
-    else greeting = '...나 잊은 줄 알았어 😢';
+    if (days < 1) greeting = 'Welcome back! 🙌';
+    else if (days < 3) greeting = 'Missed you!';
+    else if (days < 7) greeting = 'Long time no see~ Where have you been?';
+    else greeting = '...I thought you forgot about me 😢';
   }
 
   const cls = determineClass(state.stats);
@@ -132,7 +132,7 @@ async function handleSessionStart(dataDir: string): Promise<HookOutput> {
   const lines: string[] = [`${name} Lv.${state.level} — ${greeting}`];
   if (condMsg) lines.push(condMsg);
   if (state.consecutiveDays >= 7 && state.consecutiveDays % 7 === 0) {
-    lines.push(`🔥 ${state.consecutiveDays}일 연속! 대단해!`);
+    lines.push(`🔥 ${state.consecutiveDays} day streak! Amazing!`);
   }
 
   return { additionalContext: lines.join('\n') };
