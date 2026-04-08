@@ -1,0 +1,35 @@
+{
+  "PostToolUse": [
+    {
+      "hooks": [
+        {
+          "type": "command",
+          "command": "bash ${CLAUDE_PLUGIN_ROOT}/hooks/post-tool-use.sh ${CLAUDE_PLUGIN_DATA}",
+          "timeout": 5000
+        }
+      ]
+    }
+  ],
+  "SessionStart": [
+    {
+      "hooks": [
+        {
+          "type": "command",
+          "command": "bash ${CLAUDE_PLUGIN_ROOT}/hooks/session-start.sh ${CLAUDE_PLUGIN_DATA}",
+          "timeout": 5000
+        }
+      ]
+    }
+  ],
+  "SessionEnd": [
+    {
+      "hooks": [
+        {
+          "type": "command",
+          "command": "bash ${CLAUDE_PLUGIN_ROOT}/hooks/session-end.sh ${CLAUDE_PLUGIN_DATA}",
+          "timeout": 5000
+        }
+      ]
+    }
+  ]
+}

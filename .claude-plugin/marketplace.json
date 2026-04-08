@@ -1,0 +1,12 @@
+{
+  "name": "NaMinhyeok-clauder",
+  "owner": {
+    "name": "NaMinhyeok"
+  },
+  "plugins": [
+    {
+      "name": "clauder",
+      "source": "."
+    }
+  ]
+}
