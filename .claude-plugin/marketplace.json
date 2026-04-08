@@ -11,11 +11,7 @@
       "author": {
         "name": "NaMinhyeok"
       },
-      "source": {
-        "source": "url",
-        "url": "https://github.com/NaMinhyeok/clauder.git",
-        "sha": "1152455905e0d8bf16dea177fa25cdc3266e2c37"
-      }
+      "source": "./plugins/clauder"
     }
   ]
 }
