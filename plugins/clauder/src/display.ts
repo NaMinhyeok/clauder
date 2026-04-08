@@ -1,4 +1,4 @@
-import { STAT_NAMES, RARITY_WEIGHTS, type Rarity, type Condition } from './constants.js';
+import { RARITY_WEIGHTS, type Rarity, type Condition } from './constants.js';
 import { determineClass, getEvolutionStage } from './class.js';
 import { getExpProgress, getTotalXp } from './engine.js';
 import { getCharacter } from './characters.js';
