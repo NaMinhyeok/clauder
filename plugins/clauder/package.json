@@ -1,6 +1,6 @@
 {
   "name": "clauder",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Gamification plugin for Claude Code — grow your coding companion",
   "type": "module",
   "scripts": {
