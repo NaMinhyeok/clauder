@@ -77,3 +77,19 @@ export function xpForNextLevel(level: number): number {
   if (level <= 1) return 100;
   return Math.round(100 * Math.pow(1.15, level));
 }
+
+export type Rarity = 'common' | 'rare' | 'epic';
+export type Condition = 1 | 2 | 3 | 4 | 5;
+
+export interface RarityDef {
+  id: Rarity;
+  name: string;
+  stars: string;
+  weight: number; // 0-100
+}
+
+export const RARITY_WEIGHTS: RarityDef[] = [
+  { id: 'common', name: 'Common', stars: '★☆☆', weight: 55 },
+  { id: 'rare',   name: 'Rare',   stars: '★★☆', weight: 35 },
+  { id: 'epic',   name: 'Epic',   stars: '★★★', weight: 10 },
+];

@@ -62,4 +62,13 @@ describe('integration: full game loop', () => {
     const state = await readState(dataDir);
     expect(state.stats.speed).toBeGreaterThan(0);
   });
-}, { timeout: 30000 });
+
+  it('session start assigns character via gacha on first run', async () => {
+    await cli('session-start');
+    const state = await readState(dataDir);
+    expect(state.characterId).toBeDefined();
+    expect(state.rarity).toBeDefined();
+    expect(['common', 'rare', 'epic']).toContain(state.rarity);
+    expect(state.version).toBe(2);
+  });
+});

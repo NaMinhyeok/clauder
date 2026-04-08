@@ -5,7 +5,8 @@ import { resolveToolStat, grantXp, getTotalXp, calculateLevel } from './engine.j
 import { updateConditionOnSessionStart, checkConditionRecovery } from './condition.js';
 import { determineClass, getEvolutionStage } from './class.js';
 import { checkAchievements } from './achievements.js';
-import { SPEED_THRESHOLDS, CONDITION_MESSAGES, type StatName } from './constants.js';
+import { SPEED_THRESHOLDS, CONDITION_MESSAGES, RARITY_WEIGHTS, type StatName } from './constants.js';
+import { getCharacter } from './characters.js';
 
 interface HookInput {
   tool_name?: string;
@@ -113,9 +114,21 @@ async function handleSessionStart(dataDir: string): Promise<HookOutput> {
   state.lastSessionAt = now.toISOString();
   await writeState(dataDir, state);
 
+  const messages: string[] = [];
+  const char = getCharacter(state.characterId);
+  const charName = char ? char.name : 'Clauder';
+
+  if (!prevLastSession) {
+    const rarityDef = RARITY_WEIGHTS.find((r) => r.id === state.rarity);
+    if (char && rarityDef) {
+      messages.push(`🎰 Gacha time!`);
+      messages.push(`✨ ${char.name} ${rarityDef.stars} ${rarityDef.name}!`);
+    }
+  }
+
   let greeting: string;
   if (!prevLastSession) {
-    greeting = 'Welcome back! 🙌';
+    greeting = 'Welcome! 🙌';
   } else {
     const days = Math.floor((now.getTime() - new Date(prevLastSession).getTime()) / 86400000);
     if (days < 1) greeting = 'Welcome back! 🙌';
@@ -123,19 +136,18 @@ async function handleSessionStart(dataDir: string): Promise<HookOutput> {
     else if (days < 7) greeting = 'Long time no see~ Where have you been?';
     else greeting = '...I thought you forgot about me 😢';
   }
-
   const cls = determineClass(state.stats);
   const stage = getEvolutionStage(state.level);
-  const name = cls ? `${cls.emoji} ${cls.name}` : `${stage.emoji} ${stage.name}`;
+  const className = cls ? cls.name : stage.name;
   const condMsg = CONDITION_MESSAGES[state.condition];
 
-  const lines: string[] = [`${name} Lv.${state.level} — ${greeting}`];
-  if (condMsg) lines.push(condMsg);
+  messages.push(`${charName} Lv.${state.level} ${className} — ${greeting}`);
+  if (condMsg) messages.push(condMsg);
   if (state.consecutiveDays >= 7 && state.consecutiveDays % 7 === 0) {
-    lines.push(`🔥 ${state.consecutiveDays} day streak! Amazing!`);
+    messages.push(`🔥 ${state.consecutiveDays} day streak! Amazing!`);
   }
 
-  return { additionalContext: lines.join('\n') };
+  return { additionalContext: messages.join('\n') };
 }
 
 async function handleSessionEnd(dataDir: string): Promise<HookOutput> {
