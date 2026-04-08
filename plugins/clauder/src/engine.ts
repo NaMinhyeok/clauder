@@ -59,3 +59,23 @@ export function calculateLevel(totalXp: number): number {
   }
   return level;
 }
+
+export interface ExpProgress {
+  current: number;
+  needed: number;
+  ratio: number;
+}
+
+export function getExpProgress(totalXp: number, level: number): ExpProgress {
+  let accumulated = 0;
+  for (let l = 1; l < level; l++) {
+    accumulated += xpForNextLevel(l);
+  }
+  const needed = xpForNextLevel(level);
+  const current = totalXp - accumulated;
+  return {
+    current,
+    needed,
+    ratio: needed > 0 ? current / needed : 0,
+  };
+}

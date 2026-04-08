@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { resolveToolStat, grantXp, calculateLevel, getTotalXp } from '../src/engine.js';
+import { resolveToolStat, grantXp, calculateLevel, getTotalXp, getExpProgress } from '../src/engine.js';
 import { createFreshState } from '../src/state.js';
 
 describe('resolveToolStat', () => {
@@ -80,5 +80,31 @@ describe('calculateLevel', () => {
 
   it('returns higher levels for more xp', () => {
     expect(calculateLevel(1000)).toBeGreaterThan(5);
+  });
+});
+
+describe('getExpProgress', () => {
+  it('returns 0 progress for fresh state at level 1 with 0 XP', () => {
+    const progress = getExpProgress(0, 1);
+    expect(progress.current).toBe(0);
+    expect(progress.needed).toBe(100);
+    expect(progress.ratio).toBe(0);
+  });
+
+  it('returns correct progress mid-level', () => {
+    const progress = getExpProgress(50, 1);
+    expect(progress.current).toBe(50);
+    expect(progress.needed).toBe(100);
+    expect(progress.ratio).toBe(0.5);
+  });
+
+  it('returns correct progress at higher levels', () => {
+    // Level 1 needs 100 XP to reach level 2 (xpForNextLevel(1) = 100)
+    // At level 2 with 150 total XP, current progress = 150 - 100 = 50
+    // xpForNextLevel(2) = Math.round(100 * 1.15^2) = Math.round(132.25) = 132
+    const progress = getExpProgress(150, 2);
+    expect(progress.current).toBe(50);
+    expect(progress.needed).toBe(132);
+    expect(progress.ratio).toBeCloseTo(50 / 132);
   });
 });
