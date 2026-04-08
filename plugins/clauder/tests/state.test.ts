@@ -66,7 +66,7 @@ describe('state', () => {
   });
 
   it('round-trips hall of fame', async () => {
-    const entry = { className: 'Architect', classEmoji: '🏗️', level: 87, stats: { build: 100, explore: 50, debug: 30, deploy: 20, think: 10, speed: 5 }, totalXP: 215, retiredAt: '2026-05-15', createdAt: '2026-04-01', playDays: 44 };
+    const entry = { className: 'Architect', classEmoji: '🏗️', level: 87, stats: { build: 100, explore: 50, debug: 30, deploy: 20, think: 10, speed: 5 }, totalXP: 215, retiredAt: '2026-05-15', createdAt: '2026-04-01', playDays: 44, characterId: 'mochi', rarity: 'rare', characterName: 'Mochi' };
     await writeHallOfFame(dataDir, [entry]);
     const loaded = await readHallOfFame(dataDir);
     expect(loaded[0].className).toBe('Architect');

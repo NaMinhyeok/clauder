@@ -40,6 +40,9 @@ export interface HallOfFameEntry {
   retiredAt: string;
   createdAt: string;
   playDays: number;
+  characterId: string;
+  rarity: string;
+  characterName: string;
 }
 
 export function createFreshState(): ClauderState {
