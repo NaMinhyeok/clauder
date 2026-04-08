@@ -7,14 +7,14 @@
     {
       "name": "clauder",
       "description": "RPG + Tamagotchi gamification plugin for Claude Code",
-      "version": "0.1.0",
+      "version": "0.1.1",
       "author": {
         "name": "NaMinhyeok"
       },
       "source": {
         "source": "url",
         "url": "https://github.com/NaMinhyeok/clauder.git",
-        "sha": "cdeb088c868b0755d8a8f046ba152f6b38d7611b"
+        "sha": "1152455905e0d8bf16dea177fa25cdc3266e2c37"
       }
     }
   ]
