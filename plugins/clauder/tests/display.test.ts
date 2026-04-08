@@ -1,56 +1,89 @@
 import { describe, it, expect } from 'vitest';
-import { renderBar, renderStatLine, renderCard, renderConditionStars } from '../src/display.js';
+import { renderBar, renderExpBar, renderCard } from '../src/display.js';
 
 describe('renderBar', () => {
-  it('renders a 10-char bar at 50%', () => {
-    expect(renderBar(0.5, 10)).toBe('█████░░░░░');
+  it('renders a 12-char bar at 50%', () => {
+    expect(renderBar(0.5, 12)).toBe('██████░░░░░░');
   });
 
-  it('renders a 10-char bar at 0%', () => {
-    expect(renderBar(0, 10)).toBe('░░░░░░░░░░');
+  it('renders a 12-char bar at 0%', () => {
+    expect(renderBar(0, 12)).toBe('░░░░░░░░░░░░');
   });
 
-  it('renders a 10-char bar at 100%', () => {
-    expect(renderBar(1, 10)).toBe('██████████');
-  });
-});
-
-describe('renderStatLine', () => {
-  it('formats stat name, bar, percentage, and absolute value', () => {
-    const line = renderStatLine('BUILD', 0.35, 3241);
-    expect(line).toContain('BUILD');
-    expect(line).toContain('35%');
-    expect(line).toContain('3,241');
+  it('renders a 12-char bar at 100%', () => {
+    expect(renderBar(1, 12)).toBe('████████████');
   });
 });
 
-describe('renderConditionStars', () => {
-  it('renders 5 filled for condition 5', () => {
-    expect(renderConditionStars(5)).toBe('★★★★★');
-  });
-
-  it('renders 3 filled and 2 empty for condition 3', () => {
-    expect(renderConditionStars(3)).toBe('★★★☆☆');
+describe('renderExpBar', () => {
+  it('formats EXP bar with percentage and absolute values', () => {
+    const bar = renderExpBar(50, 100);
+    expect(bar).toContain('EXP');
+    expect(bar).toContain('50%');
+    expect(bar).toContain('50');
+    expect(bar).toContain('100');
   });
 });
 
 describe('renderCard', () => {
-  it('contains class, level, condition, stats, and achievements', () => {
+  it('contains ASCII art, character name, rarity, level, EXP bar, achievements', () => {
     const state = {
-      version: 1,
-      level: 45,
-      stats: { build: 3241, explore: 890, debug: 1560, deploy: 2102, think: 612, speed: 340 },
-      condition: 4,
-      consecutiveDays: 12,
+      version: 2,
+      level: 15,
+      stats: { build: 500, explore: 300, debug: 200, deploy: 150, think: 100, speed: 50 },
+      condition: 5 as const,
+      consecutiveDays: 7,
       lastSessionAt: null,
       totalToolUses: 500,
       sessionToolUses: 0,
       createdAt: '2026-01-01',
+      characterId: 'mochi',
+      rarity: 'rare' as const,
     };
-    const card = renderCard(state, { achievementCount: 23, totalAchievements: 50 });
-    expect(card).toContain('Lv.45');
-    expect(card).toContain('12d');
-    expect(card).toContain('BUILD');
-    expect(card).toContain('23/50');
+    const card = renderCard(state, { achievementCount: 5, totalAchievements: 15 });
+    expect(card).toContain('Mochi');
+    expect(card).toContain('★★☆');
+    expect(card).toContain('Rare');
+    expect(card).toContain('Lv.15');
+    expect(card).toContain('EXP');
+    expect(card).toContain('5/15');
+    expect(card).toContain('┌');  // rare border
+  });
+
+  it('does not contain stat bars', () => {
+    const state = {
+      version: 2,
+      level: 15,
+      stats: { build: 500, explore: 300, debug: 200, deploy: 150, think: 100, speed: 50 },
+      condition: 3 as const,
+      consecutiveDays: 7,
+      lastSessionAt: null,
+      totalToolUses: 500,
+      sessionToolUses: 0,
+      createdAt: '2026-01-01',
+      characterId: 'mochi',
+      rarity: 'common' as const,
+    };
+    const card = renderCard(state);
+    expect(card).not.toContain('BUILD');
+    expect(card).not.toContain('EXPLORE');
+  });
+
+  it('shows different face for low condition', () => {
+    const state = {
+      version: 2,
+      level: 1,
+      stats: { build: 0, explore: 0, debug: 0, deploy: 0, think: 0, speed: 0 },
+      condition: 1 as const,
+      consecutiveDays: 0,
+      lastSessionAt: null,
+      totalToolUses: 0,
+      sessionToolUses: 0,
+      createdAt: '2026-01-01',
+      characterId: 'mochi',
+      rarity: 'common' as const,
+    };
+    const card = renderCard(state);
+    expect(card).toContain(';');  // sad face has semicolons
   });
 });

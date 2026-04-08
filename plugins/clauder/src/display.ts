@@ -1,10 +1,21 @@
-import { STAT_NAMES, type StatName } from './constants.js';
+import { STAT_NAMES, RARITY_WEIGHTS, type Rarity, type Condition } from './constants.js';
 import { determineClass, getEvolutionStage } from './class.js';
+import { getExpProgress, getTotalXp } from './engine.js';
+import { getCharacter } from './characters.js';
 import type { ClauderState } from './state.js';
 
-export function renderBar(ratio: number, width = 10): string {
-  const filled = Math.round(ratio * width);
+export function renderBar(ratio: number, width = 12): string {
+  const clamped = Math.max(0, Math.min(1, ratio));
+  const filled = Math.round(clamped * width);
   return '█'.repeat(filled) + '░'.repeat(width - filled);
+}
+
+export function renderExpBar(current: number, needed: number): string {
+  const safeCurrentf = Math.max(0, current);
+  const ratio = needed > 0 ? safeCurrentf / needed : 0;
+  const bar = renderBar(ratio, 12);
+  const pct = Math.round(Math.max(0, Math.min(1, ratio)) * 100);
+  return `EXP [${bar}] ${pct}% (${safeCurrentf.toLocaleString('en-US')}/${needed.toLocaleString('en-US')})`;
 }
 
 export function renderConditionStars(condition: number): string {
@@ -24,25 +35,38 @@ interface CardOptions {
 }
 
 export function renderCard(state: ClauderState, { achievementCount = 0, totalAchievements = 0 }: CardOptions = {}): string {
-  const totalXp = STAT_NAMES.reduce((sum, s) => sum + state.stats[s], 0);
+  const character = getCharacter(state.characterId);
+  const rarityDef = RARITY_WEIGHTS.find((r) => r.id === state.rarity);
   const cls = determineClass(state.stats);
   const stage = getEvolutionStage(state.level);
-
-  const emoji = cls ? cls.emoji : stage.emoji;
   const className = cls ? cls.name : stage.name;
 
-  const header = `${emoji} ${className} Lv.${state.level} | 🔥 ${state.consecutiveDays}d | ⭐ ${renderConditionStars(state.condition)}`;
-  const separator = '─'.repeat(35);
+  // ASCII art
+  const condition = state.condition as Condition;
+  const rarity = state.rarity as Rarity;
+  const artLines = character
+    ? character.art[rarity][condition]
+    : ['╭─────────╮', '│  ? ? ?  │', '│   ???   │', '╰─────────╯'];
 
-  const statEntries = STAT_NAMES.map((s) => ({
-    name: s.toUpperCase(),
-    ratio: totalXp > 0 ? state.stats[s] / totalXp : 0,
-    absolute: state.stats[s],
-  }));
-  statEntries.sort((a, b) => b.absolute - a.absolute);
+  // EXP bar
+  const totalXp = getTotalXp(state);
+  const exp = getExpProgress(totalXp, state.level);
+  const expBar = renderExpBar(exp.current, exp.needed);
 
-  const statLines = statEntries.map((e) => renderStatLine(e.name, e.ratio, e.absolute)).join('\n');
-  const footer = `🏆 Achievements ${achievementCount}/${totalAchievements}`;
+  // Card assembly
+  const charInfo = character
+    ? `${character.name} ${rarityDef?.stars ?? '???'} ${rarityDef?.name ?? ''}`
+    : 'Unknown';
+  const levelLine = `Lv.${state.level} ${className} | 🔥 ${state.consecutiveDays}d`;
+  const footer = `🏆 ${achievementCount}/${totalAchievements}`;
 
-  return `${header}\n${separator}\n${statLines}\n${separator}\n${footer}`;
+  const lines = [
+    ...artLines.map((line) => `  ${line}`),
+    `  ${charInfo}`,
+    `  ${levelLine}`,
+    `  ${expBar}`,
+    `  ${footer}`,
+  ];
+
+  return lines.join('\n');
 }
