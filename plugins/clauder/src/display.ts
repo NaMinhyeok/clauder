@@ -1,4 +1,4 @@
-import { RARITY_WEIGHTS, type Rarity, type Condition } from './constants.js';
+import { RARITY_WEIGHTS, type Condition } from './constants.js';
 import { determineClass, getEvolutionStage } from './class.js';
 import { getExpProgress, getTotalXp } from './engine.js';
 import { getCharacter } from './characters.js';
@@ -11,11 +11,11 @@ export function renderBar(ratio: number, width = 12): string {
 }
 
 export function renderExpBar(current: number, needed: number): string {
-  const safeCurrentf = Math.max(0, current);
-  const ratio = needed > 0 ? safeCurrentf / needed : 0;
+  const safeCurrent = Math.max(0, current);
+  const ratio = needed > 0 ? safeCurrent / needed : 0;
   const bar = renderBar(ratio, 12);
   const pct = Math.round(Math.max(0, Math.min(1, ratio)) * 100);
-  return `EXP [${bar}] ${pct}% (${safeCurrentf.toLocaleString('en-US')}/${needed.toLocaleString('en-US')})`;
+  return `EXP [${bar}] ${pct}% (${safeCurrent.toLocaleString('en-US')}/${needed.toLocaleString('en-US')})`;
 }
 
 export function renderConditionStars(condition: number): string {
@@ -41,19 +41,15 @@ export function renderCard(state: ClauderState, { achievementCount = 0, totalAch
   const stage = getEvolutionStage(state.level);
   const className = cls ? cls.name : stage.name;
 
-  // ASCII art
   const condition = state.condition as Condition;
-  const rarity = state.rarity as Rarity;
   const artLines = character
-    ? character.art[rarity][condition]
+    ? character.art[state.rarity][condition]
     : ['╭─────────╮', '│  ? ? ?  │', '│   ???   │', '╰─────────╯'];
 
-  // EXP bar
   const totalXp = getTotalXp(state);
   const exp = getExpProgress(totalXp, state.level);
   const expBar = renderExpBar(exp.current, exp.needed);
 
-  // Card assembly
   const charInfo = character
     ? `${character.name} ${rarityDef?.stars ?? '???'} ${rarityDef?.name ?? ''}`
     : 'Unknown';

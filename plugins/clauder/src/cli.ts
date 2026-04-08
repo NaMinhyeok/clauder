@@ -115,10 +115,10 @@ async function handleSessionStart(dataDir: string): Promise<HookOutput> {
   await writeState(dataDir, state);
 
   const messages: string[] = [];
+  const char = getCharacter(state.characterId);
+  const charName = char ? char.name : 'Clauder';
 
-  // Gacha reveal on first run
   if (!prevLastSession) {
-    const char = getCharacter(state.characterId);
     const rarityDef = RARITY_WEIGHTS.find((r) => r.id === state.rarity);
     if (char && rarityDef) {
       messages.push(`🎰 Gacha time!`);
@@ -126,7 +126,6 @@ async function handleSessionStart(dataDir: string): Promise<HookOutput> {
     }
   }
 
-  // Greeting
   let greeting: string;
   if (!prevLastSession) {
     greeting = 'Welcome! 🙌';
@@ -137,9 +136,6 @@ async function handleSessionStart(dataDir: string): Promise<HookOutput> {
     else if (days < 7) greeting = 'Long time no see~ Where have you been?';
     else greeting = '...I thought you forgot about me 😢';
   }
-
-  const char = getCharacter(state.characterId);
-  const charName = char ? char.name : 'Clauder';
   const cls = determineClass(state.stats);
   const stage = getEvolutionStage(state.level);
   const className = cls ? cls.name : stage.name;

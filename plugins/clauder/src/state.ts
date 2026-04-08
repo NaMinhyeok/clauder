@@ -1,13 +1,11 @@
 import { readFile, writeFile, mkdir } from 'node:fs/promises';
 import { join } from 'node:path';
-import type { Rarity } from './constants.js';
+import type { Rarity, StatName } from './constants.js';
 import { rollGacha } from './gacha.js';
 
 const STATE_FILE = 'state.json';
 const ACHIEVEMENTS_FILE = 'achievements.json';
 const HALL_OF_FAME_FILE = 'hall-of-fame.json';
-
-type StatName = 'build' | 'explore' | 'debug' | 'deploy' | 'think' | 'speed';
 
 export interface ClauderState {
   version: number;
